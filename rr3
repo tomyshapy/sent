@@ -1,0 +1,29 @@
+bool findNegativeCycle(int n, vector<long long> &D, vector<int> &trace, vector<int> &negCycle) {
+    // mảng D và trace đã được chạy qua thuật toán Bellman-Ford
+    int negStart = -1; // đỉnh bắt đầu
+    for (auto E : e) {
+        int u = E.u;
+        int v = E.v;
+        long long w = E.w;
+        if (D[u] != INF && D[v] > D[u] + w) {
+            D[v] = -INF; 
+            trace[v] = u;
+            negStart = v; // đã tìm thấy -INF
+        }
+    }
+
+    if (negStart == -1) return false; // không có chu trình âm
+
+    int u = negStart;
+    for (int i = 0; i < n; i++) {
+        u = trace[u]; // đưa u về chu trình âm
+    }
+
+    negCycle = vector<int>(1, u);
+    for (int v = trace[u]; v != u; v = trace[u]) {
+        negCycle.push_back(v); // truy vết một vòng
+    }
+    reverse(negCycle.begin(), negCycle.end());
+    
+    return true;
+}
